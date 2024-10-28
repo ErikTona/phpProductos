@@ -1,21 +1,21 @@
 <?php
-class ProductController {
-    private $apiUrl = 'https://crud.jonathansoto.mx/api/products';
 
-    public function getProducts() {
+class ProductController {
+
+    public function getProductDetails($slug) {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $this->apiUrl,
+            CURLOPT_URL => "https://crud.jonathansoto.mx/api/products/$slug",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 0,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer ' . $_SESSION['635|dpQ8rIYnu4zuYBZB71sBeAhBrEtTuTZe8M4SGYjQ'], 
+                'Authorization: Bearer ' . $_SESSION['635|dpQ8rIYnu4zuYBZB71sBeAhBrEtTuTZe8M4SGYjQ'],
                 'Content-Type: application/json'
             ),
         ));
@@ -23,10 +23,14 @@ class ProductController {
         $response = curl_exec($curl);
         curl_close($curl);
 
-        $response_data = json_decode($response, true);
+        $productData = json_decode($response, true);
 
-        // Verificar si se obtuvo correctamente
-        return $response_data['data'] ?? []; 
+        if (isset($productData['data'])) {
+            return $productData['data'];
+        } else {
+            return null;
+        }
     }
 }
+
 ?>
