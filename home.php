@@ -57,9 +57,26 @@ $products = $productController->getProducts();
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="my-4">
           <h3>Gestionar Productos</h3>
-          
+
+          <!-- Formulario para crear producto -->
+          <form action="createProduct.php" method="POST">
+            <div class="mb-3">
+              <label for="productName" class="form-label">Nombre del Producto</label>
+              <input type="text" class="form-control" name="name" id="productName" required>
+            </div>
+            <div class="mb-3">
+              <label for="productDescription" class="form-label">Descripción</label>
+              <input type="text" class="form-control" name="description" id="productDescription" required>
+            </div>
+            <div class="mb-3">
+              <label for="productPrice" class="form-label">Precio</label>
+              <input type="number" class="form-control" name="price" id="productPrice" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Crear Producto</button>
+          </form>
+
           <!-- Mostrar productos -->
-          <div class="row">
+          <div class="row mt-4">
             <?php foreach ($products as $product): ?>
               <div class="col-md-4 mb-4">
                 <div class="card">
