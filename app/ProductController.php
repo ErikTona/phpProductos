@@ -83,6 +83,26 @@ class ProductController {
     
         return !$error && $response;
     }
+
+    public function deleteProduct($productId) {
+        $token = $_SESSION['token'];
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/products/' . $productId,
+            CURLOPT_CUSTOMREQUEST => 'DELETE',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $token
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $error = curl_errno($curl);
+        curl_close($curl);
+
+        return !$error && json_decode($response, true)['success'] ?? false;
+    }
     
     
 }
