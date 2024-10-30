@@ -3,7 +3,7 @@ session_start();
 include 'ProductController.php';
 
 $productController = new ProductController();
-$products = $productController->getProductDetails();
+$products = $productController->getProducts();
 ?>
 
 <!DOCTYPE html>
@@ -15,6 +15,8 @@ $products = $productController->getProductDetails();
   <link href="home.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <!-- Axios para solicitudes asíncronas -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 
@@ -86,6 +88,7 @@ $products = $productController->getProductDetails();
                     <h5 class="card-title"><?php echo htmlspecialchars($product['name']); ?></h5>
                     <p class="card-text"><?php echo htmlspecialchars($product['description']); ?></p>
                     <button class="btn btn-warning" onclick="loadProductData(<?php echo htmlspecialchars(json_encode($product)); ?>)">Editar</button>
+                    <button class="btn btn-danger" onclick="deleteProduct(<?php echo $product['id']; ?>)">Eliminar</button>
                   </div>
                 </div>
               </div>
@@ -97,13 +100,37 @@ $products = $productController->getProductDetails();
     </div>
   </div>
 
+  <!-- Scripts -->
   <script>
+    // Cargar datos del producto en el formulario para editar
     function loadProductData(product) {
       document.getElementById('productId').value = product.id;
       document.getElementById('productName').value = product.name;
       document.getElementById('productDescription').value = product.description;
       document.getElementById('productPrice').value = product.price;
       document.getElementById('productForm').action = 'editProduct.php';
+    }
+
+    // Eliminar producto usando Axios
+    function deleteProduct(productId) {
+      if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+        axios.delete('deleteProduct.php', {
+            data: { id: productId }
+        })
+        .then(response => {
+            if (response.data.success) {
+                alert("Producto eliminado exitosamente.");
+                // Recarga la página o actualiza la lista de productos
+                location.reload();
+            } else {
+                alert("Error al eliminar el producto.");
+            }
+        })
+        .catch(error => {
+            console.error("Error en la solicitud:", error);
+            alert("Error en la solicitud de eliminación.");
+        });
+      }
     }
   </script>
 </body>
