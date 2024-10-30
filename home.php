@@ -3,7 +3,7 @@ session_start();
 include 'ProductController.php';
 
 $productController = new ProductController();
-$products = $productController->getProducts();
+$products = $productController->getProductDetails();
 ?>
 
 <!DOCTYPE html>
@@ -58,8 +58,9 @@ $products = $productController->getProducts();
         <div class="my-4">
           <h3>Gestionar Productos</h3>
 
-          <!-- Formulario para crear producto -->
-          <form action="createProduct.php" method="POST">
+          <!-- Formulario para crear/editar producto -->
+          <form id="productForm" action="createProduct.php" method="POST">
+            <input type="hidden" id="productId" name="id">
             <div class="mb-3">
               <label for="productName" class="form-label">Nombre del Producto</label>
               <input type="text" class="form-control" name="name" id="productName" required>
@@ -72,7 +73,7 @@ $products = $productController->getProducts();
               <label for="productPrice" class="form-label">Precio</label>
               <input type="number" class="form-control" name="price" id="productPrice" required>
             </div>
-            <button type="submit" class="btn btn-primary">Crear Producto</button>
+            <button type="submit" class="btn btn-primary">Guardar Producto</button>
           </form>
 
           <!-- Mostrar productos -->
@@ -84,7 +85,7 @@ $products = $productController->getProducts();
                   <div class="card-body">
                     <h5 class="card-title"><?php echo htmlspecialchars($product['name']); ?></h5>
                     <p class="card-text"><?php echo htmlspecialchars($product['description']); ?></p>
-                    <a href="details.php?slug=<?php echo urlencode($product['slug']); ?>" class="btn btn-secondary">Detalles</a>
+                    <button class="btn btn-warning" onclick="loadProductData(<?php echo htmlspecialchars(json_encode($product)); ?>)">Editar</button>
                   </div>
                 </div>
               </div>
@@ -96,5 +97,14 @@ $products = $productController->getProducts();
     </div>
   </div>
 
+  <script>
+    function loadProductData(product) {
+      document.getElementById('productId').value = product.id;
+      document.getElementById('productName').value = product.name;
+      document.getElementById('productDescription').value = product.description;
+      document.getElementById('productPrice').value = product.price;
+      document.getElementById('productForm').action = 'editProduct.php';
+    }
+  </script>
 </body>
 </html>

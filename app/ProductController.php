@@ -33,7 +33,7 @@ class ProductController {
     }
 
     public function createProduct($name, $description, $price) {
-        $token = $_SESSION['token'];
+        $token = $_SESSION['635|dpQ8rIYnu4zuYBZB71sBeAhBrEtTuTZe8M4SGYjQ'];
     
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -57,6 +57,33 @@ class ProductController {
     
         return !$error && $response;
     }
+
+    public function updateProduct($id, $name, $description, $price) {
+        $token = $_SESSION['635|dpQ8rIYnu4zuYBZB71sBeAhBrEtTuTZe8M4SGYjQ'];
+    
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://crud.jonathansoto.mx/api/products/' . $id,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS => http_build_query(array(
+                'name' => $name,
+                'description' => $description,
+                'price' => $price,
+            )),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $token,
+                'Content-Type: application/x-www-form-urlencoded',
+            ),
+        ));
+    
+        $response = curl_exec($curl);
+        $error = curl_errno($curl);
+        curl_close($curl);
+    
+        return !$error && $response;
+    }
+    
     
 }
 
