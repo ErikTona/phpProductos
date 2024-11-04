@@ -1,19 +1,15 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Enmascarar la ruta de home.php a /home
     RewriteRule ^home/?$ home.php [L]
 
-    # Enmascarar la ruta de product.php?slug=xxx a /product/xxx/
-    RewriteRule ^product/([^/]+)/?$ product.php?slug=$1 [L,QSA]
+    # Enmascarar la ruta de details.php?slug=xxx a /details/xxx/
+    RewriteRule ^details/([^/]+)/?$ details.php?slug=$1 [L,QSA]
 
-    # Enmascarar la ruta de app/AuthController.php a /auth
     RewriteRule ^auth/?$ app/AuthController.php [L]
 
-    # Enmascarar la ruta de app/ProductController.php a /resources
     RewriteRule ^resources/?$ app/ProductController.php [L]
 
-    # Asegurarse de que cualquier archivo .php no sea accesible directamente
     <FilesMatch "\.php$">
         Order Deny,Allow
         Deny from all
