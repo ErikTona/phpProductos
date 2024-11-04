@@ -4,6 +4,7 @@ include 'ProductController.php';
 
 $productController = new ProductController();
 $products = $productController->getProducts();
+$brands = $productController->getBrands(); // Obtener la lista de marcas
 ?>
 
 <!DOCTYPE html>
@@ -74,6 +75,15 @@ $products = $productController->getProducts();
               <input type="number" class="form-control" name="price" id="productPrice" required>
             </div>
             <div class="mb-3">
+              <label for="productBrand" class="form-label">Marca</label>
+              <select class="form-control" name="brand_id" id="productBrand" required>
+                <option value="">Seleccione una marca</option>
+                <?php foreach ($brands as $brand): ?>
+                  <option value="<?php echo $brand['id']; ?>"><?php echo htmlspecialchars($brand['name']); ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="mb-3">
               <label for="productImage" class="form-label">Imagen del Producto</label>
               <input type="file" class="form-control" name="image" id="productImage" accept="image/*">
             </div>
@@ -110,6 +120,7 @@ $products = $productController->getProducts();
       document.getElementById('productName').value = product.name;
       document.getElementById('productDescription').value = product.description;
       document.getElementById('productPrice').value = product.price;
+      document.getElementById('productBrand').value = product.brand_id; // Seleccionar la marca
       document.getElementById('productForm').action = 'editProduct.php';
     }
 
