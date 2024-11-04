@@ -1,39 +1,21 @@
 <?php
+session_start();
 include 'ProductController.php';
 
 $productController = new ProductController();
 
-// Guardar detalles del producto
-$name = $_POST['name'];
-$description = $_POST['description'];
-$price = $_POST['price'];
-$image_url = null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+    $price = $_POST['price'];
+    $brand_id = $_POST['brand_id'];
 
-if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-    $imageTmpPath = $_FILES['image']['tmp_name'];
-    $imageName = basename($_FILES['image']['name']);
-    $uploadDir = 'uploads/';
-    
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
-    
-    $targetFilePath = $uploadDir . $imageName;
+    $result = $productController->createProduct($name, $description, $price, $brand_id);
 
-    if (move_uploaded_file($imageTmpPath, $targetFilePath)) {
-        $image_url = $targetFilePath;
+    if ($result) {
+        header("Location: home.php");
+    } else {
+        echo "Error al crear el producto";
     }
 }
-
-$newProduct = [
-    'name' => $name,
-    'description' => $description,
-    'price' => $price,
-    'image_url' => $image_url
-];
-
-$productController->createProduct($newProduct);
-
-header("Location: home.php");
-exit();
 ?>

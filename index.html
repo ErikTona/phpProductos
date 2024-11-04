@@ -28,6 +28,8 @@
 				<h3>Accede al panel administrador</h3>
 
 				<form method="POST" action="app/authController.php">
+					<input type="hidden" name="global_token" value="<?php echo $_SESSION['global_token']; ?>">
+
 				  <div class="mb-3">
 				    <label for="email" class="form-label">Email</label>
 				    <input type="email" class="form-control" id="email" name="correo" aria-describedby="emailHelp" required>

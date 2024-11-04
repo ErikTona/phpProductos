@@ -60,8 +60,10 @@ class ProductController {
         return $brandsData['data'] ?? [];
     }
 
-    public function createProduct($name, $description, $price) {
-        $token = $_SESSION['635|dpQ8rIYnu4zuYBZB71sBeAhBrEtTuTZe8M4SGYjQ'];
+    public function createProduct($name, $description, $price, $brand_id) {
+        if ($_POST['global_token'] !== $_SESSION['global_token']) {
+            die("Acceso denegado: token no válido.");
+        }
     
         $curl = curl_init();
         curl_setopt_array($curl, array(

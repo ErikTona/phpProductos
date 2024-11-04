@@ -1,7 +1,17 @@
 <?php
 session_start();
 
+// Generar un token si no existe
+if (!isset($_SESSION['global_token'])) {
+    $_SESSION['global_token'] = bin2hex(random_bytes(32));
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'login') {
+    // Verificar el token global
+    if ($_POST['global_token'] !== $_SESSION['global_token']) {
+        die("Acceso denegado: token no válido.");
+    }
+
     // Recoger datos del formulario
     $correo = $_POST['correo'] ?? '';
     $contraseña = $_POST['contraseña'] ?? '';
@@ -38,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             // Guardar el token en la sesión
             $_SESSION['auth_token'] = $response_data['data']['token'];
 
-            // Redirigir a home.html
+            // Redirigir a home.php
             header('Location: ../home.php');
             exit();
         } else {
