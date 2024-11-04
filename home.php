@@ -15,8 +15,6 @@ $products = $productController->getProducts();
   <link href="home.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <!-- Axios para solicitudes asíncronas -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 
@@ -61,7 +59,7 @@ $products = $productController->getProducts();
           <h3>Gestionar Productos</h3>
 
           <!-- Formulario para crear/editar producto -->
-          <form id="productForm" action="createProduct.php" method="POST">
+          <form id="productForm" action="createProduct.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" id="productId" name="id">
             <div class="mb-3">
               <label for="productName" class="form-label">Nombre del Producto</label>
@@ -74,6 +72,10 @@ $products = $productController->getProducts();
             <div class="mb-3">
               <label for="productPrice" class="form-label">Precio</label>
               <input type="number" class="form-control" name="price" id="productPrice" required>
+            </div>
+            <div class="mb-3">
+              <label for="productImage" class="form-label">Imagen del Producto</label>
+              <input type="file" class="form-control" name="image" id="productImage" accept="image/*">
             </div>
             <button type="submit" class="btn btn-primary">Guardar Producto</button>
           </form>
@@ -120,7 +122,6 @@ $products = $productController->getProducts();
         .then(response => {
             if (response.data.success) {
                 alert("Producto eliminado exitosamente.");
-                // Recarga la página o actualiza la lista de productos
                 location.reload();
             } else {
                 alert("Error al eliminar el producto.");
